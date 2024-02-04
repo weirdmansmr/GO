@@ -1,24 +1,45 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
+	"log"
+	"math/rand"
+	"os"
+	"strconv"
+	"strings"
 )
-
 func main() {
-	totalPriceChecker()
+	target := rand.Intn(100) + 1
+	fmt.Println("I've chosen a random number between 1 and 100.")
+	fmt.Println("Can you guess it?")
+	reader := bufio.NewReader(os.Stdin)
+	success := false
+	for guesses := 0; guesses < 10; guesses++ {
+		fmt.Println("You have", 10-guesses, "guesses left.")
+		fmt.Print("Make a guess: ")
+		input, err := reader.ReadString('\n')
+		if err != nil {
+			log.Fatal(err)
+		}
+		input = strings.TrimSpace(input)
+		guess, err := strconv.Atoi(input)
+		if err != nil {
+			log.Fatal(err)
+		}
+		if guess < target {
+			fmt.Println("Oops. Your guess was LOW.")
+		} else if guess > target {
+			fmt.Println("Oops. Your guess was HIGH.")
+		} else {
+			success = true
+			fmt.Println("Good job! You guessed it!")
+		break
+		}
 }
-
-func totalPriceChecker()  {
-	price := 100
-	fmt.Println("Price is", price, "dollars.")
-	taxRate := 0.08
-	tax := float64(price) * taxRate
-	fmt.Println("Tax is", tax, "dollars.")
-	total := float64(price) + tax
-	fmt.Println("Total cost is", total, "dollars.")
-	availableFunds := 120
-	fmt.Println(availableFunds, "dollars available.")
-	fmt.Println("Within budget?", total <= float64(availableFunds))
+if !success {
+	fmt.Println("Sorry, you didn't guess my number. It was:", target)
+}
 }
 
 // func printResults() {
